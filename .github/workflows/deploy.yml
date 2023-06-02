@@ -1,0 +1,40 @@
+name: Run Python Script
+
+on: 
+  push:
+    branches:
+      - main
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          host: ${{secrets.SSH_HOST}}
+          key: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+          TG_BOT_TOKEN: ${{secrets.TG_BOT_TOKEN}}
+          APP_ID: ${{secrets.APP_ID}}
+          API_HASH: ${{secrets.API_HASH}}
+      
+      - name: Clone repository
+        run: |
+          git clone https://github.com/MalithCrpt/DownloadIt.git
+          cd DownloadIt
+        
+      - name: Run Python Script
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+    
+      - name: Starting Bot
+        run: |
+          python3 bot.py
+          
+        
